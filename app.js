@@ -102,4 +102,54 @@
       });
     }, { passive: true });
   }
+
+  // header turns solid once you scroll past the opening photo
+  var over = $('.hdr--over');
+  if (over) {
+    var solid = function () { over.classList.toggle('solid', window.scrollY > 40); };
+    solid(); window.addEventListener('scroll', solid, { passive: true });
+  }
+
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // reveal on scroll (content is visible by default; the js class on <html> hides it until it enters)
+  var rv = $$('.rv');
+  if (rv.length) {
+    if (!('IntersectionObserver' in window) || still) { rv.forEach(function (n) { n.classList.add('in'); }); }
+    else {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      rv.forEach(function (n) { io.observe(n); });
+    }
+  }
+
+  // slow parallax on photos (a few dozen pixels, clamped)
+  var px = $$('[data-px]');
+  if (px.length && !still) {
+    var pt = false;
+    var upd = function () {
+      pt = false;
+      var vh = window.innerHeight;
+      px.forEach(function (im) {
+        var box = im.parentNode.getBoundingClientRect();
+        if (box.bottom < -200 || box.top > vh + 200) return;
+        var p = (box.top + box.height / 2 - vh / 2) / vh;
+        p = Math.max(-1, Math.min(1, p));
+        im.style.setProperty('--py', (-p * (+im.getAttribute('data-px'))).toFixed(1) + 'px');
+      });
+    };
+    upd();
+    window.addEventListener('scroll', function () { if (!pt) { pt = true; requestAnimationFrame(upd); } }, { passive: true });
+    window.addEventListener('resize', upd);
+  }
+
+  // photo track: previous and next buttons
+  var track = $('.js-track');
+  if (track) {
+    var step = function (d) { var f = track.querySelector('figure'); track.scrollBy({ left: d * (f ? f.offsetWidth + 20 : 320), behavior: still ? 'auto' : 'smooth' }); };
+    var pv = $('.js-prev'), nx = $('.js-next');
+    if (pv) pv.addEventListener('click', function () { step(-1); });
+    if (nx) nx.addEventListener('click', function () { step(1); });
+  }
 })();
