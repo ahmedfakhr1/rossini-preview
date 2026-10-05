@@ -69,7 +69,7 @@ h1,h2,h3{font-family:"Antonio","Hanken Grotesk",sans-serif;font-weight:400;text-
 .c2{right:0;bottom:0;width:54%;height:40%;box-shadow:0 0 0 10px var(--marble)}
 .sig{margin-top:30px;font-size:18px;line-height:1.6;max-width:32em;color:var(--mute)}
 .sig b{font:italic 500 23px/1.3 "Newsreader",serif;color:var(--ink)}
-.sig span{font:500 22px "Antonio";letter-spacing:.04em;color:var(--coral);margin:0 4px}
+.sig span{font:500 22px "Antonio";letter-spacing:.04em;color:var(--coral);margin:0 0 0 4px}
 .rows{list-style:none;margin-top:30px}
 .rows li{display:flex;align-items:center;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
 .rows li:last-child{border-bottom:1px solid var(--line)}
